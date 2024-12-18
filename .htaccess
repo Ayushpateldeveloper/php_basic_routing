@@ -1,0 +1,20 @@
+RewriteEngine On
+
+# Allow direct access to auth.php
+RewriteCond %{REQUEST_URI} ^/post_management/backend/auth\.php$ [NC]
+RewriteRule ^ - [L]
+
+# Other rules
+RewriteCond %{REQUEST_URI} !^/backend/auth\.php$ [NC]
+RewriteCond %{REQUEST_URI} !^/backend/index.php$
+RewriteRule ^(home|login|dashboard|404)$ backend/index.php?page=$1 [L]
+
+
+# Redirect root to the home page
+RewriteRule ^$ backend/index.php?page=home [L]
+
+# Only redirect invalid requests to 404 if no valid rule matches
+RewriteCond %{REQUEST_URI} !^/backend/index.php$
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^.*$ backend/index.php?page=404 [L]
